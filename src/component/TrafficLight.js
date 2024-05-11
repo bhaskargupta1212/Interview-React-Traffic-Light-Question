@@ -1,25 +1,46 @@
-import React, { useState, useEffect } from "react";
+import React, { useEffect, useState } from 'react';
+import { LIGHT_DURATION, LIGHT_COLORS } from '../constant/constants'; 
 
-export const TrafficLight = ({ intervalTime }) => {
-  const colors = ["red", "orange", "green"];
-  const [colorIndex, setColorIndex] = useState(0);
+const TrafficLights = () => {
+  const [activeLight, setActiveLight] = useState('red');
+  const [nextLight, setNextLight] = useState('yellow');
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
-    }, intervalTime * 1000); // Convert seconds to milliseconds
+    const timer = setInterval(() => {
+      switch (activeLight) {
+        case 'green':
+          setTimeout(() => {
+            setActiveLight('yellow');
+            setNextLight('red');
+          });
+          break;
+        case 'yellow':
+          setTimeout(() => setActiveLight(nextLight));
+          break;
+        case 'red':
+          setTimeout(() => {
+            setActiveLight('yellow');
+            setNextLight('green');
+          });
+          break;
+        default:
+          break;
+      }
+    }, LIGHT_DURATION[activeLight]);
 
-    return () => clearInterval(interval);
-  }, [intervalTime, colors.length]);
+    return () => clearInterval(timer);
+  }, [activeLight, nextLight]);
 
   return (
-    <div className="traffic-light">
-      {colors.map((color, index) => (
+    <div className='traffic-light'> 
+      {LIGHT_COLORS.map(color => (
         <div
-          key={index}
-          className={`light ${color} ${index === colorIndex ? "active" : ""}`}
-        ></div>
+          key={color}
+          className={`light ${color} ${activeLight === color ? 'active' : ''}`}
+        />
       ))}
     </div>
   );
 };
+
+export default TrafficLights;

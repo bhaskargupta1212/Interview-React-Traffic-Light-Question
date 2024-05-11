@@ -1,11 +1,13 @@
-import "./App.css";
-import { TrafficLight } from "./component/TrafficLight";
+import React from 'react';
+import TrafficLights from './component/TrafficLight';
+import './App.css';
 
 function App() {
   return (
-    <div className="App">
-      <TrafficLight intervalTime={5} />
-    </div>
+    <main className='app'>
+      <h1>Traffic Lights</h1>
+      <TrafficLights />
+    </main>
   );
 }
 
